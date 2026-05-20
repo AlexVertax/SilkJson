@@ -189,6 +189,21 @@ namespace SilkJson
         /// <param name="jsonString">The JSON string to parse.</param>
         /// <returns>A Json instance representing the parsed string.</returns>
         public static Json Parse(string jsonString) => JsonParser.Parse(jsonString);
+
+        /// <summary>
+        /// Returns a formatted JSON string with indentation without building a full Json tree.
+        /// </summary>
+        /// <param name="jsonString">The JSON string to format.</param>
+        /// <param name="indent">The indentation string (default is 2 spaces).</param>
+        /// <returns>A formatted JSON string.</returns>
+        public static string Prettify(string jsonString, string indent = "  ") => JsonFormatter.Pretty(jsonString, indent);
+
+        /// <summary>
+        /// Returns a compact JSON string without insignificant whitespace and comments.
+        /// </summary>
+        /// <param name="jsonString">The JSON string to compact.</param>
+        /// <returns>A compact JSON string.</returns>
+        public static string Compact(string jsonString) => JsonFormatter.Compact(jsonString);
         
         /// <summary>
         /// Returns a formatted JSON string with indentation.

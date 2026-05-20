@@ -256,6 +256,50 @@ namespace SilkJson.Tests
             Assert.Equal("30", parsed["john"]["Age"].ToString());
         }
 
+        [Fact]
+        public void Json_PrettyString_FormatsWithoutBuildingJsonTree()
+        {
+            // Arrange
+            string json = "{\"user\":{\"name\":\"John\",\"tags\":[\"admin\",true,null]}}";
+
+            // Act
+            string pretty = Json.Prettify(json);
+
+            // Assert
+            Assert.Equal("{\n  \"user\": {\n    \"name\": \"John\",\n    \"tags\": [\n      \"admin\",\n      true,\n      null\n    ]\n  }\n}", pretty);
+            Assert.Equal("John", Json.Parse(pretty)["user"]["name"].ToString());
+        }
+
+        [Fact]
+        public void Json_PrettyString_PreservesEscapedContentInsideStrings()
+        {
+            // Arrange
+            string json = "{\"text\":\"line 1\\n\\\"quoted\\\" // not a comment\",\"path\":\"C:\\\\temp\\\\file.txt\"}";
+
+            // Act
+            string pretty = Json.Prettify(json);
+            string compact = Json.Compact(pretty);
+
+            // Assert
+            Assert.Contains("\\\"quoted\\\" // not a comment", pretty);
+            Assert.Contains("C:\\\\temp\\\\file.txt", pretty);
+            Assert.Equal(json, compact);
+        }
+
+        [Fact]
+        public void Json_CompactString_RemovesWhitespaceAndLineComments()
+        {
+            // Arrange
+            string json = "{\n  // user payload\n  \"user\": {\n    \"name\": \"John\", // display name\n    \"roles\": [ \"admin\", \"editor\" ]\n  }\n}";
+
+            // Act
+            string compact = Json.Compact(json);
+
+            // Assert
+            Assert.Equal("{\"user\":{\"name\":\"John\",\"roles\":[\"admin\",\"editor\"]}}", compact);
+            Assert.Equal("editor", Json.Parse(compact)["user"]["roles"][1].ToString());
+        }
+
         private class TestPerson
         {
             public string Name { get; set; }

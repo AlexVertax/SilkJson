@@ -10,10 +10,14 @@
         <LangVersion>11</LangVersion>
         <GenerateProgramFile>false</GenerateProgramFile>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     </PropertyGroup>
 
     <ItemGroup>
       <Compile Remove="plans\**" />
+      <Compile Remove="SilkJson.Tests\**" />
+      <Compile Remove="**\obj\**" />
+      <Compile Remove="**\bin\**" />
     </ItemGroup>
 
     <ItemGroup>
