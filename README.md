@@ -103,6 +103,15 @@ string pretty = user.Pretty();
 Console.WriteLine($"Pretty print:\n{pretty}");
 ```
 
+### Format Raw JSON String
+
+```csharp
+string rawJson = @"{ ""user"" : { ""name"" : ""John"", ""roles"" : [ ""admin"", ""editor"" ] } }";
+
+string prettyJson = Json.Prettify(rawJson);
+string compactJson = rawJson.CompactJson();
+```
+
 ---
 
 ## Creating JsonObject
@@ -459,6 +468,8 @@ Console.WriteLine(string.Join(", ", orderedUsers));
 | `Json.Parse(string)` | Parse JSON string to Json |
 | `Json.From(object)` | Serialize object to JSON string |
 | `Json.To<T>(string)` | Deserialize JSON string to T |
+| `Json.Prettify(string)` | Pretty-format raw JSON string without parsing into `Json` tree |
+| `Json.Compact(string)` | Compact raw JSON string without parsing into `Json` tree |
 | `JsonObject.Set(key, value)` | Set key-value pair |
 | `JsonArray.Add(value)` | Add element to array |
 | `JsonArray.AddRange(values)` | Add multiple elements |
