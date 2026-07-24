@@ -317,7 +317,8 @@ namespace SilkJson
             foreach (FieldInfo field in type.GetFields(bindingFlags))
             {
                 string fieldName = field.Name;
-                if (field.IsDefined(typeof(NonSerializedAttribute), true)) continue;
+                if (field.IsDefined(typeof(NonSerializedAttribute), true) ||
+                    field.IsDefined(typeof(JsonNonSerializedAttribute), true)) continue;
                 if (field.Attributes == (FieldAttributes.Private | FieldAttributes.InitOnly))
                 {
                     int startIndex = fieldName.IndexOf('<') + 1;
