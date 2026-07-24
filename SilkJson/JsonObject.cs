@@ -298,6 +298,16 @@ namespace SilkJson
             }
             builder.Append("\n").Append(JsonUtils.GetIndent(depth, indent)).Append('}');
         }
+        
+        /// <summary>
+        /// Deserializes this JsonObject into an existing object instance.
+        /// </summary>
+        /// <param name="obj">The object to populate.</param>
+        /// <param name="bindingFlags">Binding flags for member lookup.</param>
+        public void To(object obj, BindingFlags bindingFlags = JsonSerializer.InstanceLookup)
+        {
+            To(obj, obj.GetType().GetMembers(bindingFlags), bindingFlags);
+        }
 
         /// <summary>
         /// Deserializes this JsonObject into an existing object instance using the specified members.
@@ -352,8 +362,7 @@ namespace SilkJson
         /// <returns>An instance of the target type.</returns>
         public override object To(Type type, BindingFlags bindingFlags = JsonSerializer.InstanceLookup)
         {
-            IEnumerable<MemberInfo> members = type.GetMembers(bindingFlags);
-            return To(type, members, bindingFlags);
+            return To(type, type.GetMembers(bindingFlags), bindingFlags);
         }
         
         /// <summary>
@@ -368,6 +377,15 @@ namespace SilkJson
             object v = Activator.CreateInstance(type);
             To(v, members, bindingFlags);
             return v;
+        }
+        
+        /// <summary>
+        /// Converts this JsonObject to a Dictionary.
+        /// </summary>
+        /// <returns>A Dictionary containing the key-value pairs of this JsonObject.</returns>
+        public Dictionary<string, Json> ToDictionary()
+        {
+            return _dictionary.Cast<DictionaryEntry>().ToDictionary(entry => (string)entry.Key, entry => (Json)entry.Value);
         }
 
         /// <summary>
