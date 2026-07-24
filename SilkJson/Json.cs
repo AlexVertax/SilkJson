@@ -182,6 +182,14 @@ namespace SilkJson
 
             return item;
         }
+        
+        /// <summary>
+        /// Merges another JsonObject into this one.
+        /// </summary>
+        /// <param name="obj">The object to merge.</param>
+        /// <param name="conflictResolver">Optional resolver for key conflicts.</param>
+        /// <returns>This instance for method chaining.</returns>
+        public Json Merge(object obj, JsonObject.MergeConflictResolver conflictResolver = null) => Obj().Merge(obj, conflictResolver);
 
         /// <summary>
         /// Parses a JSON string into a Json instance.

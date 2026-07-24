@@ -143,6 +143,7 @@ namespace SilkJson
         /// <param name="index">The zero-based index at which to insert.</param>
         /// <param name="key">The key to insert.</param>
         /// <param name="value">The value to insert.</param>
+        /// <returns>This instance for method chaining.</returns>
         public void Insert(int index, string key, object value) => _dictionary.Insert(index, key, From(value));
 
         /// <summary>
@@ -150,7 +151,8 @@ namespace SilkJson
         /// </summary>
         /// <param name="other">The other JsonObject to merge.</param>
         /// <param name="conflictResolver">Optional resolver for key conflicts.</param>
-        public void Merge(JsonObject other, MergeConflictResolver conflictResolver = null)
+        /// <returns>This instance for method chaining.</returns>
+        public JsonObject Merge(JsonObject other, MergeConflictResolver conflictResolver = null)
         {
             foreach (DictionaryEntry entry in other._dictionary)
             {
@@ -165,6 +167,19 @@ namespace SilkJson
                     _dictionary[key] = value;
                 }
             }
+
+            return this;
+        }
+        
+        /// <summary>
+        /// Merges an object into this JsonObject, converting it to a JsonObject first.
+        /// </summary>
+        /// <param name="obj">The object to merge.</param>
+        /// <param name="conflictResolver">Optional resolver for key conflicts.</param>
+        /// <returns>This instance for method chaining.</returns>
+        public new JsonObject Merge(object obj, MergeConflictResolver conflictResolver = null)
+        {
+            return Merge(new JsonObject(obj), conflictResolver);
         }
 
         /// <summary>
