@@ -12,6 +12,9 @@ namespace SilkJson
     /// </summary>
     public abstract partial class Json: DynamicObject, IEnumerable<Json>
     {
+        /// <summary>
+        /// Represents a missing child or a JSON null value returned by failed lookups.
+        /// </summary>
         protected static readonly JsonValue _missedValue = new JsonValue(null);
     
         /// <summary>
@@ -226,8 +229,11 @@ namespace SilkJson
         }
 
         /// <summary>
-        /// Internal method to build a formatted JSON string.
+        /// Appends the formatted JSON representation of this node to a string builder.
         /// </summary>
+        /// <param name="builder">The builder that receives the formatted JSON text.</param>
+        /// <param name="depth">The current nesting depth.</param>
+        /// <param name="indent">The indentation unit to repeat at each nesting level.</param>
         public virtual void PrettyStringify(StringBuilder builder, int depth, string indent)
         {
             Stringify(builder);
@@ -247,7 +253,17 @@ namespace SilkJson
         /// <returns>>A Json instance representing the serialized object.</returns>
         public static Json Serialize(object obj) => JsonSerializer.FromObject(obj);
 
+        /// <summary>
+        /// Sets a direct child identified by a property name or array index.
+        /// </summary>
+        /// <param name="key">The property name or array index.</param>
+        /// <param name="value">The value to convert to JSON and assign.</param>
         public abstract void SetChild(StringOrIntValue key, object value);
+
+        /// <summary>
+        /// Appends the compact JSON representation of this node to a string builder.
+        /// </summary>
+        /// <param name="builder">The builder that receives the JSON text.</param>
         public abstract void Stringify(StringBuilder builder);
 
         /// <summary>
@@ -269,6 +285,7 @@ namespace SilkJson
         /// </summary>
         /// <typeparam name="T">The target type.</typeparam>
         /// <param name="json">The JSON string to deserialize.</param>
+        /// <returns>The deserialized instance of <typeparamref name="T"/>.</returns>
         public static T To<T>(string json) => JsonSerializer.ToObject<T>(json);
         
         /// <summary>
@@ -278,6 +295,10 @@ namespace SilkJson
         /// <param name="target">The object to populate.</param>
         public static void To(string json, object target) => JsonSerializer.ToObject(json, target);
     
+        /// <summary>
+        /// Returns the compact JSON representation of this node.
+        /// </summary>
+        /// <returns>The compact JSON text.</returns>
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
@@ -285,6 +306,11 @@ namespace SilkJson
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Returns either a formatted or compact JSON representation of this node.
+        /// </summary>
+        /// <param name="pretty"><see langword="true"/> to format the output; otherwise, <see langword="false"/>.</param>
+        /// <returns>The JSON text.</returns>
         public string ToString(bool pretty)
         {
             return pretty ? Pretty() : ToString();

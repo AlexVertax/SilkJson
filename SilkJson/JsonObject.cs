@@ -41,6 +41,10 @@ namespace SilkJson
             foreach (var pair in dict) Set(pair.Key, pair.Value);
         }
 
+        /// <summary>
+        /// Initializes a new JSON object by serializing an object.
+        /// </summary>
+        /// <param name="obj">The object whose members are copied.</param>
         public JsonObject(object obj)
         {
             Json fromObject = JsonSerializer.FromObject(obj);
@@ -64,6 +68,7 @@ namespace SilkJson
             foreach (DictionaryEntry entry in _dictionary) yield return (Json)entry.Value;
         }
 
+        /// <inheritdoc/>
         public override Json Child(StringOrIntValue key)
         {
             if (key.IsString)
@@ -92,6 +97,7 @@ namespace SilkJson
         /// </summary>
         public void Clear() => _dictionary.Clear();
 
+        /// <inheritdoc/>
         public override bool Contains(StringOrIntValue key)
         {
             if (key.IsString) return _dictionary.Contains((string)key);
@@ -222,6 +228,7 @@ namespace SilkJson
         /// <param name="index">The zero-based index of the item to remove.</param>
         public void RemoveAt(int index) => _dictionary.RemoveAt(index);
 
+        /// <inheritdoc/>
         public override void SetChild(StringOrIntValue key, object value)
         {
             if (key.IsString) _dictionary[(string)key] = From(value);
@@ -266,9 +273,7 @@ namespace SilkJson
             builder.Append('}');
         }
 
-        /// <summary>
-        /// Internal method to build a formatted JSON string.
-        /// </summary>
+        /// <inheritdoc/>
         public override void PrettyStringify(StringBuilder builder, int depth, string indent)
         {
             if (_dictionary.Count == 0)

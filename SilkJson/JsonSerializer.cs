@@ -65,7 +65,6 @@ namespace SilkJson
         /// </summary>
         /// <param name="json">The JSON string to deserialize.</param>
         /// <param name="target">The object to populate.</param>
-        /// <param name="bindingFlags">Binding flags for member lookup.</param>
         public static void ToObject(string json, object target)
         {
             if (target == null) return;

@@ -118,6 +118,7 @@ namespace SilkJson
         /// <returns>True if the item is found; otherwise, false.</returns>
         public bool Contains(Json item) => _items.Contains(item);
 
+        /// <inheritdoc/>
         public override bool Contains(StringOrIntValue key)
         {
             if (!key.IsInt) return false;
@@ -278,9 +279,7 @@ namespace SilkJson
             builder.Append(']');
         }
 
-        /// <summary>
-        /// Internal method to build a formatted JSON string.
-        /// </summary>
+        /// <inheritdoc/>
         public override void PrettyStringify(StringBuilder builder, int depth, string indent)
         {
             if (_items.Count == 0)

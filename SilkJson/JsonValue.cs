@@ -51,6 +51,7 @@ namespace SilkJson
         /// <returns>An empty JsonEnumerable.</returns>
         public override JsonEnumerable Children() => new JsonEnumerable(Array.Empty<Json>());
 
+        /// <inheritdoc/>
         public override Json Child(StringOrIntValue key) => _missedValue;
 
         /// <summary>
@@ -129,6 +130,7 @@ namespace SilkJson
         /// <returns>Always returns 0 for JsonValue.</returns>
         public override int RemoveAll(RemoveMatch match) => 0;
 
+        /// <inheritdoc/>
         public override void SetChild(StringOrIntValue key, object value)
         {
             

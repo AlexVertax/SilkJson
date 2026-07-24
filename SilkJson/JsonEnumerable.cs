@@ -25,6 +25,7 @@ namespace SilkJson
         /// <param name="items">The items to wrap.</param>
         public JsonEnumerable(IEnumerable<Json> items) => _items = items.ToList();
 
+        /// <inheritdoc/>
         public override Json Child(StringOrIntValue key) => new JsonEnumerable(_items.Select(i => i.Child(key)));
 
         /// <summary>
@@ -33,6 +34,7 @@ namespace SilkJson
         /// <returns>A JsonEnumerable containing all children.</returns>
         public override JsonEnumerable Children() => new JsonEnumerable (_items.SelectMany(i => i.Children()));
 
+        /// <inheritdoc/>
         public override bool Contains(StringOrIntValue key) => _items.Any(i => i.Contains(key));
 
         /// <summary>
@@ -55,6 +57,7 @@ namespace SilkJson
         /// <returns>Always returns 0.</returns>
         public override int RemoveAll(RemoveMatch match) => 0;
 
+        /// <inheritdoc/>
         public override void SetChild(StringOrIntValue key, object value)
         {
             foreach (Json item in _items)
