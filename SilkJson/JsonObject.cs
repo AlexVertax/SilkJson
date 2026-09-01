@@ -379,6 +379,7 @@ namespace SilkJson
         /// <returns>An instance of the target type.</returns>
         public object To(Type type, IEnumerable<MemberInfo> members, BindingFlags bindingFlags = JsonSerializer.InstanceLookup)
         {
+            if (JsonSerializer.OnDeserialize != null && JsonSerializer.OnDeserialize(this, type, out object value)) return value;
             object v = Activator.CreateInstance(type);
             To(v, members, bindingFlags);
             return v;

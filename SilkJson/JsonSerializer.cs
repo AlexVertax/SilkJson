@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,6 +10,28 @@ namespace SilkJson
     /// </summary>
     public static class JsonSerializer
     {
+        /// <summary>
+        /// Handles custom serialization of an object.
+        /// </summary>
+        public delegate bool SerializeDelegate(object target, out Json json);
+
+        /// <summary>
+        /// Handles custom deserialization of a JSON value.
+        /// </summary>
+        public delegate bool DeserializeDelegate(Json json, Type type, out object value);
+
+        /// <summary>
+        /// Optional hook invoked before the default serialization logic.
+        /// Return true when the value has been handled.
+        /// </summary>
+        public static SerializeDelegate OnSerialize;
+
+        /// <summary>
+        /// Optional hook invoked before the default deserialization logic.
+        /// Return true when the value has been handled.
+        /// </summary>
+        public static DeserializeDelegate OnDeserialize;
+
         /// <summary>
         /// Binding flags for looking up instance members (public and non-public).
         /// </summary>
@@ -27,6 +49,10 @@ namespace SilkJson
         {
             if (target is Json json) return json;
             if (target == null) return new JsonValue(target, JsonValueType.Null);
+            if (OnSerialize != null && OnSerialize(target, out json))
+            {
+                return json ?? new JsonValue(null, JsonValueType.Null);
+            }
             if (target is string || target is bool || target is int || target is long || target is short || target is float || target is double) return new JsonValue(target);
             if (target is decimal) return new JsonValue((double)(decimal)target);
             if (target is DateTime time) return new JsonValue(time.ToString("s"));

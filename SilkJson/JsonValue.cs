@@ -219,7 +219,11 @@ namespace SilkJson
         /// <param name="type">The target type.</param>
         /// <param name="bindingFlags">Binding flags for member lookup.</param>
         /// <returns>An instance of the target type.</returns>
-        public override object To(Type type, BindingFlags bindingFlags = JsonSerializer.InstanceLookup) => GetValue(type);
+        public override object To(Type type, BindingFlags bindingFlags = JsonSerializer.InstanceLookup)
+        {
+            if (JsonSerializer.OnDeserialize != null && JsonSerializer.OnDeserialize(this, type, out object value)) return value;
+            return GetValue(type);
+        }
 
         /// <summary>
         /// Returns a string representation of this JsonValue.

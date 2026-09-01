@@ -102,6 +102,7 @@ namespace SilkJson
         /// <returns>An instance of the target type.</returns>
         public override object To(Type type, BindingFlags bindingFlags = JsonSerializer.InstanceLookup)
         {
+            if (JsonSerializer.OnDeserialize != null && JsonSerializer.OnDeserialize(this, type, out object value)) return value;
             if (type.IsArray)
             {
                 Type elementType = type.GetElementType();

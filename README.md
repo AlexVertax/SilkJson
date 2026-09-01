@@ -320,6 +320,46 @@ Department dept = Json.To<Department>(@"{""Name"":""IT"",""Employees"":[{""Name"
 // dept.Employees[1].Name = "Bob", Salary = 120000
 ```
 
+### Custom Serialization and Deserialization
+
+Use the global hooks to override conversion for selected types. Return `true` when handled, or `false` to use the default behavior.
+
+```csharp
+JsonSerializer.OnSerialize = (object value, out Json json) =>
+{
+    if (value is not Money money)
+    {
+        json = null;
+        return false;
+    }
+
+    json = new JsonValue($"{money.Amount} {money.Currency}");
+    return true;
+};
+
+JsonSerializer.OnDeserialize = (Json json, Type targetType, out object value) =>
+{
+    if (targetType != typeof(Money))
+    {
+        value = null;
+        return false;
+    }
+
+    string[] parts = json.String().Split(' ');
+    value = new Money
+    {
+        Amount = decimal.Parse(parts[0]),
+        Currency = parts[1]
+    };
+    return true;
+};
+
+Json moneyJson = Json.From(new Money { Amount = 19, Currency = "EUR" });
+Money money = moneyJson.To<Money>();
+```
+
+Hooks also apply to nested values. `OnDeserialize` is used by `Json.To<T>()`; for JSON text, call `Json.Parse(text).To<T>()`. Set a hook to `null` to disable it.
+
 ---
 
 ## Type Casting & Checking
